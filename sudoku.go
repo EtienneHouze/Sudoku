@@ -109,9 +109,11 @@ func check(e error){
 	}
 }
 // LoadGrid loads a grid by parsing a file
-func LoadGrid(fileName string) Grid {
+func LoadGrid(fileName string) (Grid, error) {
 	dat, err := ioutil.ReadFile(fileName)
-	check(err)
+	if err != nil{
+		return Grid{}, err
+	}
 	fmt.Print("Reading file " + fileName)
 	strData := string(dat)
 	splitStr := strings.Split(strData, " ")
@@ -121,10 +123,12 @@ func LoadGrid(fileName string) Grid {
 	numArray := [81]uint8{}
 	for i := 0; i < 81; i++{
 		num, e := strconv.Atoi(splitStr[i])
-		check(e)
+		if e != nil{
+			return Grid{}, e
+		}
 		numArray[i] = uint8(num)
 	}
-	return ParseGrid(numArray)
+	return ParseGrid(numArray), nil
 }
 
 // ToString conveniently converts the sudoku grid into a string for printing
