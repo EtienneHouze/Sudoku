@@ -1,8 +1,10 @@
-package Sudoku
+package main
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -410,4 +412,20 @@ func (g *Grid) Solve() {
 			solved = true
 		}
 	}
+}
+
+
+func main() {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Println("Please enter the full path to the .grid file.")
+	fileName, _ := reader.ReadString('\n')
+	g, err := LoadGrid(fileName[:len(fileName)-1])
+	if err != nil{
+		fmt.Println("The file could not be loaded, please re-try it!")
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(g.ToString())
+	g.Solve()
+	fmt.Println(g.ToString())
 }
